@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guess Number Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #ffc107;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+        }
+        p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+        input[type="number"] {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 4px;
+            border: 1px solid #ffc107;
+            background-color: #fff;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 4px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        #message {
+            margin-top: 20px;
+            color: #333;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>숫자 맞추기 게임</h1>
+        <p>1부터 100 사이의 숫자를 맞춰보세요. 최대 10번의 시도 기회가 주어집니다.</p>
+        <input type="number" id="guess" placeholder="숫자를 입력하세요">
+        <button onclick="checkGuess()">제출</button>
+        <p id="message"></p>
+    </div>
+
+    <script>
+        // 1부터 100 사이의 랜덤한 숫자 선택
+        var secretNumber = Math.floor(Math.random() * 100) + 1;
+        var attempts = 0;
+        var maxAttempts = 10;
+
+        function checkGuess() {
+            var guessInput = document.getElementById("guess");
+            var message = document.getElementById("message");
+            var guess = parseInt(guessInput.value);
+
+            if (isNaN(guess) || guess < 1 || guess > 100) {
+                message.textContent = "1부터 100 사이의 유효한 숫자를 입력하세요.";
+                return;
+            }
+
+            attempts++;
+
+            if (guess < secretNumber) {
+                message.textContent = "너무 낮습니다.";
+            } else if (guess > secretNumber) {
+                message.textContent = "너무 높습니다.";
+            } else {
+                message.textContent = `정답입니다! ${attempts}번째 시도만에 맞췄습니다.`;
+                disableInputAndButton();
+                return;
+            }
+
+            if (attempts === maxAttempts) {
+                message.textContent = `아쉽지만 시도 횟수를 모두 사용했습니다. 정답은 ${secretNumber}입니다.`;
+                disableInputAndButton();
+            }
+
+            guessInput.value = "";
+        }
+
+        function disableInputAndButton() {
+            document.getElementById("guess").disabled = true;
+            document.querySelector("button").disabled = true;
+        }
+    </script>
+</body>
+</html>
